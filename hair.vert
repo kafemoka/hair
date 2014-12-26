@@ -7,8 +7,30 @@ layout (location = 0) in vec4 position;
 // ビュープロジェクション変換行列
 uniform mat4 mc;
 
+// 近傍の節点を取得するテクスチャバッファオブジェクト
+uniform samplerBuffer neighbor;
+
+// 一本の髪の毛の最初と最後の節点のインデックス
+uniform ivec2 endpoint;
+
+// 光源位置
+const vec4 pl = vec4(1.0, 6.0, 4.0, 1.0);
+
+// フラグメントシェーダに送る節点の視線・光線・接線ベクトル
+out vec3 v, l, t;
+
 void main()
 {
   // スクリーン座標系の座標値
   gl_Position = mc * position;
+
+  // 視線ベクトルは頂点位置の逆ベクトル
+  v = -normalize(position.xyz);
+
+  // 光線ベクトルは頂点から光源に向かうベクトル
+  l = normalize((pl - position * pl.w).xyz);
+
+  // 接線ベクトルは処理対象の節点の前の節点から次の節点に向かうベクトル
+  t = normalize(texelFetch(neighbor, max(gl_VertexID + 1, endpoint.s)) -
+                texelFetch(neighbor, min(gl_VertexID - 1, endpoint.t))).xyz;
 }
