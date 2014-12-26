@@ -33,8 +33,8 @@
 		7D21B2351A4DAB7300B7CBAD /* Window.cpp */ = {isa = PBXFileReference; fileEncoding = 8; lastKnownFileType = sourcecode.cpp.cpp; path = Window.cpp; sourceTree = "<group>"; };
 		7D21B2371A4DABE100B7CBAD /* hair.frag */ = {isa = PBXFileReference; fileEncoding = 8; lastKnownFileType = sourcecode.glsl; path = hair.frag; sourceTree = "<group>"; };
 		7D21B2381A4DABE100B7CBAD /* hair.vert */ = {isa = PBXFileReference; fileEncoding = 8; lastKnownFileType = sourcecode.glsl; path = hair.vert; sourceTree = "<group>"; };
-		7D21B2391A4DB08000B7CBAD /* force.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = force.vert; sourceTree = "<group>"; };
-		7D21B23A1A4DB08A00B7CBAD /* update.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = update.vert; sourceTree = "<group>"; };
+		7D21B2391A4DB08000B7CBAD /* force.vert */ = {isa = PBXFileReference; fileEncoding = 8; lastKnownFileType = sourcecode.glsl; path = force.vert; sourceTree = "<group>"; };
+		7D21B23A1A4DB08A00B7CBAD /* update.vert */ = {isa = PBXFileReference; fileEncoding = 8; lastKnownFileType = sourcecode.glsl; path = update.vert; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
