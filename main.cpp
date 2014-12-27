@@ -112,14 +112,6 @@ int main()
   glClearColor(back[0], back[1], back[2], back[3]);
 
   //
-  // プログラムオブジェクト
-  //
-
-  // 描画用のシェーダプログラムを読み込む
-  const GLuint hairShader(ggLoadShader("hair.vert", "hair.frag"));
-  const GLint hairMcLoc(glGetUniformLocation(hairShader, "mc"));
-
-  //
   // 頂点バッファオブジェクト
   //
 
@@ -158,6 +150,14 @@ int main()
   glEnableVertexAttribArray(0);
 
   //
+  // プログラムオブジェクト
+  //
+
+  // 描画用のシェーダプログラムを読み込む
+  const GLuint hairShader(ggLoadShader("hair.vert", "hair.frag"));
+  const GLint hairMcLoc(glGetUniformLocation(hairShader, "mc"));
+
+  //
   // 描画
   //
 
@@ -171,7 +171,7 @@ int main()
     const GgMatrix mc(window.getMp() * window.getMv());
 
     //
-    // 描画
+    // 通常の描画
     //
 
     // 頂点配列オブジェクトを選択する
@@ -183,7 +183,7 @@ int main()
     // ビュープロジェクション変換行列を設定する
     glUniformMatrix4fv(hairMcLoc, 1, GL_FALSE, mc.get());
 
-    // 通常の描画を行う
+    // 頂点配列を描画する
     glMultiDrawArrays(GL_LINE_STRIP, first, count, hairNumber);
 
     // フレームバッファを入れ替える
