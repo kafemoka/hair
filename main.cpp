@@ -118,29 +118,6 @@ int main()
   glClearColor(back[0], back[1], back[2], back[3]);
 
   //
-  // プログラムオブジェクト
-  //
-
-  // 描画用のシェーダプログラムを読み込む
-  const GLuint hairShader(ggLoadShader("hair.vert", "hair.frag"));
-  const GLint hairMcLoc(glGetUniformLocation(hairShader, "mc"));
-
-  // 節点に加わる力の計算用のシェーダプログラムを読み込む
-  const char *forceOut[] = { "force" };
-  const GLuint forceShader(ggLoadShader("force.vert", nullptr, nullptr, array_sizeof(forceOut), forceOut));
-  const GLint forceNeighborLoc(glGetUniformLocation(forceShader, "neighbor"));
-  const GLint forceEndpointLoc(glGetUniformLocation(forceShader, "endpoint"));
-  const GLint forceL0Loc(glGetUniformLocation(forceShader, "l0"));
-  const GLint forceCenterLoc(glGetUniformLocation(forceShader, "center"));
-  const GLint forceRadiusLoc(glGetUniformLocation(forceShader, "radius"));
-
-  // 節点の位置の更新用のシェーダプログラムを読み込む
-  const char *updateOut[] = { "newPosition", "newVelocity" };
-  const GLuint updateShader(ggLoadShader("update.vert", nullptr, nullptr, array_sizeof(updateOut), updateOut));
-  const GLint updateDtLoc(glGetUniformLocation(updateShader, "dt"));
-  const GLint updateAnchorLoc(glGetUniformLocation(updateShader, "anchor"));
-
-  //
   // 頂点バッファオブジェクト
   //
 
@@ -241,7 +218,7 @@ int main()
 
   // 節点の位置のテクスチャオブジェクトを二つ作成する
   GLuint positionTexture[2];
-  glGenTextures(2, positionTexture);
+  glGenTextures(array_sizeof(positionTexture), positionTexture);
 
   // 節点の位置の一つ目のテクスチャオブジェクト
   glBindTexture(GL_TEXTURE_BUFFER, positionTexture[0]);
@@ -250,6 +227,29 @@ int main()
   // 節点の位置の二つ目のテクスチャオブジェクト
   glBindTexture(GL_TEXTURE_BUFFER, positionTexture[1]);
   glTexBuffer(GL_TEXTURE_BUFFER, GL_RGB32F, positionBuffer[1]);
+
+  //
+  // プログラムオブジェクト
+  //
+
+  // 描画用のシェーダプログラムを読み込む
+  const GLuint hairShader(ggLoadShader("hair.vert", "hair.frag"));
+  const GLint hairMcLoc(glGetUniformLocation(hairShader, "mc"));
+
+  // 節点に加わる力の計算用のシェーダプログラムを読み込む
+  const char *forceOut[] = { "force" };
+  const GLuint forceShader(ggLoadShader("force.vert", nullptr, nullptr, array_sizeof(forceOut), forceOut));
+  const GLint forceNeighborLoc(glGetUniformLocation(forceShader, "neighbor"));
+  const GLint forceEndpointLoc(glGetUniformLocation(forceShader, "endpoint"));
+  const GLint forceL0Loc(glGetUniformLocation(forceShader, "l0"));
+  const GLint forceCenterLoc(glGetUniformLocation(forceShader, "center"));
+  const GLint forceRadiusLoc(glGetUniformLocation(forceShader, "radius"));
+
+  // 節点の位置の更新用のシェーダプログラムを読み込む
+  const char *updateOut[] = { "newPosition", "newVelocity" };
+  const GLuint updateShader(ggLoadShader("update.vert", nullptr, nullptr, array_sizeof(updateOut), updateOut));
+  const GLint updateDtLoc(glGetUniformLocation(updateShader, "dt"));
+  const GLint updateAnchorLoc(glGetUniformLocation(updateShader, "anchor"));
 
   //
   // 描画
@@ -268,7 +268,7 @@ int main()
     const GgMatrix mc(window.getMp() * window.getMv());
 
     //
-    // 描画
+    // 通常の描画
     //
 
     // 頂点配列オブジェクトを選択する
@@ -280,7 +280,7 @@ int main()
     // ビュープロジェクション変換行列を設定する
     glUniformMatrix4fv(hairMcLoc, 1, GL_FALSE, mc.get());
 
-    // 通常の描画を行う
+    // 頂点配列を描画する
     glMultiDrawArrays(GL_LINE_STRIP, first, count, hairNumber);
 
     // フレームバッファを入れ替える
