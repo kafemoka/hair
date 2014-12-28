@@ -5,6 +5,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <algorithm>
+#include <array>
 
 // ウィンドウ関連の処理
 #include "Window.h"
@@ -27,15 +28,6 @@ const int loops(5);
 
 namespace
 {
-  //
-  // 配列の要素数の取得
-  //
-  template <typename TYPE, std::size_t SIZE>
-  GLsizei array_sizeof(const TYPE (&)[SIZE])
-  {
-    return GLsizei(SIZE);
-  }
-
   //
   // 頭髪データの作成
   //
@@ -125,8 +117,8 @@ int main()
   const GLsizeiptr pointCount(hairNumber * hairKnots);
 
   // 節点の位置の頂点バッファオブジェクトを二つ作成する
-  GLuint positionBuffer[2];
-  glGenBuffers(array_sizeof(positionBuffer), positionBuffer);
+  std::array<GLuint, 2> positionBuffer;
+  glGenBuffers(positionBuffer.size(), positionBuffer.data());
 
   // 節点の位置の一つ目の頂点バッファオブジェクトのメモリを確保する
   glBindBuffer(GL_ARRAY_BUFFER, positionBuffer[0]);
@@ -144,8 +136,8 @@ int main()
   glBufferData(GL_ARRAY_BUFFER, pointCount * sizeof (GLfloat[3]), 0, GL_STREAM_COPY);
 
   // 節点の速度の頂点バッファオブジェクトを二つ作成する
-  GLuint velocityBuffer[2];
-  glGenBuffers(array_sizeof(velocityBuffer), velocityBuffer);
+  std::array<GLuint, 2> velocityBuffer;
+  glGenBuffers(velocityBuffer.size(), velocityBuffer.data());
 
   // 節点の速度の一つ目の頂点バッファオブジェクトのメモリを確保する
   glBindBuffer(GL_ARRAY_BUFFER, velocityBuffer[0]);
@@ -173,8 +165,8 @@ int main()
   //
 
   // 頂点配列オブジェクトを二つ作成する
-  GLuint vao[2];
-  glGenVertexArrays(array_sizeof(vao), vao);
+  std::array<GLuint, 2> vao;
+  glGenVertexArrays(vao.size(), vao.data());
 
   // 一つ目の頂点配列オブジェクトの設定を開始する
   glBindVertexArray(vao[0]);
@@ -217,8 +209,8 @@ int main()
   //
 
   // 節点の位置のテクスチャオブジェクトを二つ作成する
-  GLuint positionTexture[2];
-  glGenTextures(array_sizeof(positionTexture), positionTexture);
+  std::array<GLuint, 2> positionTexture;
+  glGenTextures(positionTexture.size(), positionTexture.data());
 
   // 節点の位置の一つ目のテクスチャオブジェクト
   glBindTexture(GL_TEXTURE_BUFFER, positionTexture[0]);
@@ -237,8 +229,8 @@ int main()
   const GLint hairMcLoc(glGetUniformLocation(hairShader, "mc"));
 
   // 節点に加わる力の計算用のシェーダプログラムを読み込む
-  const char *forceOut[] = { "force" };
-  const GLuint forceShader(ggLoadShader("force.vert", nullptr, nullptr, array_sizeof(forceOut), forceOut));
+  const std::array<const char *, 1> forceOut = { "force" };
+  const GLuint forceShader(ggLoadShader("force.vert", nullptr, nullptr, forceOut.size(), forceOut.data()));
   const GLint forceNeighborLoc(glGetUniformLocation(forceShader, "neighbor"));
   const GLint forceEndpointLoc(glGetUniformLocation(forceShader, "endpoint"));
   const GLint forceL0Loc(glGetUniformLocation(forceShader, "l0"));
@@ -246,8 +238,8 @@ int main()
   const GLint forceRadiusLoc(glGetUniformLocation(forceShader, "radius"));
 
   // 節点の位置の更新用のシェーダプログラムを読み込む
-  const char *updateOut[] = { "newPosition", "newVelocity" };
-  const GLuint updateShader(ggLoadShader("update.vert", nullptr, nullptr, array_sizeof(updateOut), updateOut));
+  const std::array<const char *, 2> updateOut = { "newPosition", "newVelocity" };
+  const GLuint updateShader(ggLoadShader("update.vert", nullptr, nullptr, updateOut.size(), updateOut.data()));
   const GLint updateDtLoc(glGetUniformLocation(updateShader, "dt"));
   const GLint updateAnchorLoc(glGetUniformLocation(updateShader, "anchor"));
 
