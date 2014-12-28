@@ -5,6 +5,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <algorithm>
+#include <array>
 
 // ウィンドウ関連の処理
 #include "Window.h"
@@ -21,15 +22,6 @@ const GLfloat back[] = { 1.0f, 1.0f, 0.9f, 0.0f };
 
 namespace
 {
-  //
-  // 配列の要素数の取得
-  //
-  template <typename TYPE, std::size_t SIZE>
-  GLsizei array_sizeof(const TYPE (&)[SIZE])
-  {
-    return GLsizei(SIZE);
-  }
-
   //
   // 頭髪データの作成
   //
@@ -119,18 +111,18 @@ int main()
   const GLsizeiptr pointCount(hairNumber * hairKnots);
 
   // 節点の位置の頂点バッファオブジェクトを作成する
-  GLuint positionBuffer[1];
-  glGenBuffers(array_sizeof(positionBuffer), positionBuffer);
+  std::array<GLuint, 1> positionBuffer;
+  glGenBuffers(positionBuffer.size(), positionBuffer.data());
 
   // 節点の位置の頂点バッファオブジェクトのメモリを確保する
   glBindBuffer(GL_ARRAY_BUFFER, positionBuffer[0]);
   glBufferData(GL_ARRAY_BUFFER, pointCount * sizeof (GLfloat[3]), 0, GL_STATIC_DRAW);
 
   // 節点の位置の一つ目の頂点バッファオブジェクトに初期位置を設定する
-  GLint first[hairNumber];
-  GLsizei count[hairNumber];
+  std::array<GLint, hairNumber> first;
+  std::array<GLsizei, hairNumber> count;
   GLfloat (*const position)[3](static_cast<GLfloat (*)[3]>(glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY)));
-  makeHair(position, hairNumber, hairKnots, first, count);
+  makeHair(position, hairNumber, hairKnots, first.data(), count.data());
   glUnmapBuffer(GL_ARRAY_BUFFER);
 
   //
@@ -138,8 +130,8 @@ int main()
   //
 
   // 頂点配列オブジェクトを作成する
-  GLuint vao[1];
-  glGenVertexArrays(array_sizeof(vao), vao);
+  std::array<GLuint, 1> vao;
+  glGenVertexArrays(vao.size(), vao.data());
 
   // 頂点配列オブジェクトの設定を開始する
   glBindVertexArray(vao[0]);
@@ -184,7 +176,7 @@ int main()
     glUniformMatrix4fv(hairMcLoc, 1, GL_FALSE, mc.get());
 
     // 頂点配列を描画する
-    glMultiDrawArrays(GL_LINE_STRIP, first, count, hairNumber);
+    glMultiDrawArrays(GL_LINE_STRIP, first.data(), count.data(), hairNumber);
 
     // フレームバッファを入れ替える
     window.swapBuffers();
