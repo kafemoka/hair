@@ -1,20 +1,16 @@
 #version 150 core
 #extension GL_ARB_explicit_attrib_location : enable
 
-// 節点のローカル座標系での位置
-layout (location = 0) in vec4 position;
+// 定数
+const vec4 pl = vec4(1.0, 6.0, 4.0, 1.0);           // 光源位置
 
-// ビュープロジェクション変換行列
-uniform mat4 mc;
+// 頂点属性
+layout (location = 0) in vec4 position;             // 節点のローカル座標系での位置
 
-// 近傍の節点を取得するテクスチャバッファオブジェクト
-uniform samplerBuffer neighbor;
-
-// 一本の髪の毛の最初と最後の節点のインデックス
-uniform ivec2 endpoint;
-
-// 光源位置
-const vec4 pl = vec4(1.0, 6.0, 4.0, 1.0);
+// uniform 変数
+uniform mat4 mc;                                    // ビュープロジェクション変換行列
+uniform samplerBuffer neighbor;                     // 近傍の節点を取得するテクスチャバッファオブジェクト
+uniform ivec2 endpoint;                             // 一本の髪の毛の最初と最後の節点のインデックス
 
 // フラグメントシェーダに送る節点の視線・光線・接線ベクトル
 out vec3 v, l, t;
