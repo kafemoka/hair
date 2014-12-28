@@ -25,7 +25,7 @@ void main()
   vec3 nv = normalize(v);                           // 視線ベクトル
   vec3 nl = normalize(l);                           // 光線ベクトル
   vec3 nt = normalize(t);                           // 接線ベクトル
-  
+
   // Kajiya-Kay モデルによる陰影付け
   float lt = dot(nl, nt);
   float lt2 = sqrt(1.0 - lt * lt);
@@ -34,6 +34,6 @@ void main()
   vec4 iamb = kamb * lamb;
   vec4 idiff = lt2 * kdiff * ldiff;
   vec4 ispec = pow(max(lt2 * vt2 - lt * vt, 0.0), kshi) * kspec * lspec;
-  
+
   fc = iamb + idiff + ispec;
 }
