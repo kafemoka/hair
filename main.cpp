@@ -144,8 +144,8 @@ int main()
   glBufferData(GL_ARRAY_BUFFER, pointCount * sizeof (GLfloat[3]), 0, GL_STREAM_COPY);
 
   // 節点の速度の一つ目の頂点バッファオブジェクトに初速度を設定する
-  GLfloat (*const velocity)[3](static_cast<GLfloat (*)[3]>(glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY)));
-  std::fill(velocity[0], velocity[0] + pointCount * 3, 0.0f);
+  GLfloat *const velocity(static_cast<GLfloat *>(glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY)));
+  std::fill(velocity, velocity + pointCount * 3, 0.0f);
   glUnmapBuffer(GL_ARRAY_BUFFER);
 
   // 節点の速度の二つ目の頂点バッファオブジェクトのメモリを確保する
