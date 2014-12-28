@@ -125,10 +125,10 @@ int main()
   glBufferData(GL_ARRAY_BUFFER, pointCount * sizeof (GLfloat[3]), 0, GL_STREAM_COPY);
 
   // 節点の位置の一つ目の頂点バッファオブジェクトに初期位置を設定する
-  GLint first[hairNumber];
-  GLsizei count[hairNumber];
+  std::array<GLint, hairNumber> first;
+  std::array<GLsizei, hairNumber> count;
   GLfloat (*const position)[3](static_cast<GLfloat (*)[3]>(glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY)));
-  makeHair(position, hairNumber, hairKnots, first, count);
+  makeHair(position, hairNumber, hairKnots, first.data(), count.data());
   glUnmapBuffer(GL_ARRAY_BUFFER);
 
   // 節点の位置の二つ目の頂点バッファオブジェクトのメモリを確保する
@@ -273,7 +273,7 @@ int main()
     glUniformMatrix4fv(hairMcLoc, 1, GL_FALSE, mc.get());
 
     // 頂点配列を描画する
-    glMultiDrawArrays(GL_LINE_STRIP, first, count, hairNumber);
+    glMultiDrawArrays(GL_LINE_STRIP, first.data(), count.data(), hairNumber);
 
     // フレームバッファを入れ替える
     window.swapBuffers();
