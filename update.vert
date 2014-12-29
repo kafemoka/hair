@@ -28,6 +28,6 @@ void main()
   vec3 v = velocity + a * dt;
 
   // 位置と速度の更新 (Heun 法)
-  newPosition = position.xyz + step(anchor + 1, gl_VertexID) * 0.5 * (velocity + v) * dt;
+  newPosition = position.xyz + step(0.0, float(gl_VertexID - anchor - 1)) * 0.5 * (velocity + v) * dt;
   newVelocity = v;
 }
