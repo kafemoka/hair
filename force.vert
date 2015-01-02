@@ -37,11 +37,9 @@ void main()
 
   // 頭にめり込んだ節点を頭の表面に押し出す力
   float f = max(radius - l, 0.0);
-  force = 10000.0 * f * f * v / l;
 
-  // 節点が根元でなければ隣接する節点から受ける力を加える
-  if (gl_VertexID > endpoint.s) force += elasticity(gl_VertexID - 1);
-
-  // 節点が先端でなければ隣接する節点から受ける力を加える
-  if (gl_VertexID < endpoint.t) force += elasticity(gl_VertexID + 1);
+  // 根元と先端以外の節点では隣接する節点から受ける力を加える
+  force = 10000.0 * f * f * v / l
+        + step(0.0, float(gl_VertexID - 1 - endpoint.s)) * elasticity(gl_VertexID - 1)
+        + step(0.0, float(endpoint.t - gl_VertexID - 1)) * elasticity(gl_VertexID + 1);
 }
