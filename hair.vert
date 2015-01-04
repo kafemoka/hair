@@ -12,7 +12,7 @@ uniform mat4 mc;                                    // ƒrƒ…[ƒvƒƒWƒFƒNƒVƒ‡ƒ“•ÏŠ
 uniform samplerBuffer neighbor;                     // ‹ß–T‚Ìß“_‚ğæ“¾‚·‚éƒeƒNƒXƒ`ƒƒƒoƒbƒtƒ@ƒIƒuƒWƒFƒNƒg
 uniform ivec2 endpoint;                             // ˆê–{‚Ì”¯‚Ì–Ñ‚ÌÅ‰‚ÆÅŒã‚Ìß“_‚ÌƒCƒ“ƒfƒbƒNƒX
 
-// ƒtƒ‰ƒOƒƒ“ƒgƒVƒF[ƒ_‚É‘—‚éß“_‚Ì‹üEŒõüEÚüƒxƒNƒgƒ‹
+// ƒWƒIƒƒgƒŠƒVƒF[ƒ_‚É‘—‚éß“_‚Ì‹üEŒõüEÚüƒxƒNƒgƒ‹
 out vec3 v, l, t;
 
 void main()

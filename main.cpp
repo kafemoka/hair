@@ -225,7 +225,7 @@ int main()
   //
 
   // 描画用のシェーダプログラムを読み込む
-  const GLuint hairShader(ggLoadShader("hair.vert", "hair.frag"));
+  const GLuint hairShader(ggLoadShader("hair.vert", "hair.frag", "hair.geom"));
   const GLint hairMcLoc(glGetUniformLocation(hairShader, "mc"));
   const GLint hairNeighborLoc(glGetUniformLocation(hairShader, "neighbor"));
   const GLint hairEndpointLoc(glGetUniformLocation(hairShader, "endpoint"));
