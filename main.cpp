@@ -285,7 +285,7 @@ int main()
     for (int i = 0; i < hairNumber; ++i)
     {
       glUniform2i(hairEndpointLoc, first[i], first[i] + count[i] - 1);
-      glDrawArrays(GL_LINE_STRIP, first[i], count[i]);
+      glDrawArrays(GL_LINE_STRIP_ADJACENCY, first[i], count[i]);
     }
 
     // フレームバッファを入れ替える

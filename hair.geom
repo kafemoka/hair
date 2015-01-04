@@ -1,8 +1,12 @@
 #version 150 core
 #extension GL_ARB_explicit_attrib_location : enable
 
+layout (lines_adjacency) in;
+layout (line_strip, max_vertices = 16) out;
+
 // バーテックスシェーダから受け取る節点の視線・光線・接線ベクトル
 in vec3 v, l, t;
+
 
 //
 // Catmull-Rom Spline

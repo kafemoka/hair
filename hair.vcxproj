@@ -85,6 +85,7 @@
   <ItemGroup>
     <None Include="force.vert" />
     <None Include="hair.frag" />
+    <None Include="hair.geom" />
     <None Include="hair.vert" />
     <None Include="update.vert" />
   </ItemGroup>
