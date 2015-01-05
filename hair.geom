@@ -18,16 +18,16 @@ out vec3 t;                                         // 接線ベクトル
 
 void main()
 {
-  vec4 dp = gl_in[1].gl_Position - gl_in[2].gl_Position;
-  vec4 m1 = (gl_in[2].gl_Position - gl_in[0].gl_Position) * 0.5;
-  vec4 m2 = (gl_in[3].gl_Position - gl_in[1].gl_Position) * 0.5;
+  vec4 m0 = (gl_in[2].gl_Position - gl_in[0].gl_Position) * 0.5;    // (P1 - P-1) / 2
+  vec4 m1 = (gl_in[3].gl_Position - gl_in[1].gl_Position) * 0.5;    // (P2 - P0) / 2
+  vec4 dp = gl_in[1].gl_Position - gl_in[2].gl_Position;            // P0 - P1
 
   for (int i = 0; i <= division; ++i)
   {
     float s = float(i) / float(division);
 
     // Catmull-Rom 曲線
-    vec4 position = (((dp * 2.0f + m1 + m2) * s - dp * 3.0f - m1 * 2.0f - m2) * s + m1) * s + gl_in[1].gl_Position;
+    vec4 position = (((dp * 2.0f + m0 + m1) * s - dp * 3.0f - m0 * 2.0f - m1) * s + m0) * s + gl_in[1].gl_Position;
 
     // スクリーン座標系の座標値
     gl_Position = mc * position;
@@ -39,7 +39,7 @@ void main()
     l = normalize((pl - position * pl.w).xyz);
 
     // 接線ベクトルは Catmull-Rom 曲線 の微分
-    t = normalize(((dp * 6.0f + (m1 + m2) * 3.0f) * s - dp * 6.0f - m1 * 4.0f - m2 * 2.0f) * s + m1).xyz;
+    t = normalize(((dp * 6.0f + (m0 + m1) * 3.0f) * s - dp * 6.0f - m0 * 4.0f - m1 * 2.0f) * s + m0).xyz;
 
     // 頂点の出力
     EmitVertex();
