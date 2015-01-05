@@ -49,5 +49,8 @@
     <None Include="update.vert">
       <Filter>シェーダー ファイル</Filter>
     </None>
+    <None Include="hair.geom">
+      <Filter>シェーダー ファイル</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -225,10 +225,8 @@ int main()
   //
 
   // 描画用のシェーダプログラムを読み込む
-  const GLuint hairShader(ggLoadShader("hair.vert", "hair.frag"));
+  const GLuint hairShader(ggLoadShader("hair.vert", "hair.frag", "hair.geom"));
   const GLint hairMcLoc(glGetUniformLocation(hairShader, "mc"));
-  const GLint hairNeighborLoc(glGetUniformLocation(hairShader, "neighbor"));
-  const GLint hairEndpointLoc(glGetUniformLocation(hairShader, "endpoint"));
 
   // 節点に加わる力の計算用のシェーダプログラムを読み込む
   const std::array<const char *, 1> forceOut = { "force" };
@@ -274,19 +272,8 @@ int main()
     // ビュープロジェクション変換行列を設定する
     glUniformMatrix4fv(hairMcLoc, 1, GL_FALSE, mc.get());
 
-    // 近傍の頂点の位置のテクスチャオバッファブジェクトのサンプラを指定する
-    glUniform1i(hairNeighborLoc, 0);
-
-    // 近傍の頂点の位置のテクスチャバッファオブジェクトを結合する
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_BUFFER, positionTexture[buffer]);
-
     // 頂点配列を描画する
-    for (int i = 0; i < hairNumber; ++i)
-    {
-      glUniform2i(hairEndpointLoc, first[i], first[i] + count[i] - 1);
-      glDrawArrays(GL_LINE_STRIP, first[i], count[i]);
-    }
+    glMultiDrawArrays(GL_LINE_STRIP_ADJACENCY, first.data(), count.data(), hairNumber);
 
     // フレームバッファを入れ替える
     window.swapBuffers();
