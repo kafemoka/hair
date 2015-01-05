@@ -21,13 +21,17 @@ void main()
   vec4 m0 = (gl_in[2].gl_Position - gl_in[0].gl_Position) * 0.5;    // (P1 - P-1) / 2
   vec4 m1 = (gl_in[3].gl_Position - gl_in[1].gl_Position) * 0.5;    // (P2 - P0) / 2
   vec4 dp = gl_in[1].gl_Position - gl_in[2].gl_Position;            // P0 - P1
+  vec4 a = 2.0 * dp + m0 + m1;
+  vec4 b = -3.0 * dp - 2.0 * m0 - m1;
+  vec4 c = m0;
+  vec4 d = gl_in[1].gl_Position;
 
   for (int i = 0; i <= division; ++i)
   {
     float s = float(i) / float(division);
 
     // Catmull-Rom 曲線
-    vec4 position = (((dp * 2.0 + m0 + m1) * s - dp * 3.0 - m0 * 2.0 - m1) * s + m0) * s + gl_in[1].gl_Position;
+    vec4 position = ((a * s + b) * s + c) * s + d;
 
     // スクリーン座標系の座標値
     gl_Position = mc * position;
@@ -39,7 +43,7 @@ void main()
     l = normalize((pl - position * pl.w).xyz);
 
     // 接線ベクトルは Catmull-Rom 曲線 の微分
-    t = normalize(((dp * 6.0 + (m0 + m1) * 3.0) * s - dp * 6.0 - m0 * 4.0 - m1 * 2.0) * s + m0).xyz;
+    t = normalize(((3.0 * a * s + 2.0 * b) * s + c).xyz);
 
     // 頂点の出力
     EmitVertex();
