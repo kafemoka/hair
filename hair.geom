@@ -4,15 +4,47 @@
 layout (lines_adjacency) in;
 layout (line_strip, max_vertices = 16) out;
 
-// バーテックスシェーダから受け取る節点の視線・光線・接線ベクトル
-in vec3 v, l, t;
+// 定数
+const int division = 4;                             // 曲線の分割数
+const vec4 pl = vec4(1.0, 6.0, 4.0, 1.0);           // 光源位置
 
+// uniform 変数
+uniform mat4 mc;                                    // ビュープロジェクション変換行列
 
-//
-// Catmull-Rom Spline
-//
-vec3 catmull_rom(const in vec3 p0, const in vec3 p1, const in p2, const in vec3 p3, float t)
+// ラスタライザに送る頂点属性
+out vec3 v;                                         // 視線ベクトル
+out vec3 l;                                         // 光線ベクトル
+out vec3 t;                                         // 接線ベクトル
+
+void main()
 {
-  vec3 dp = p1 - p2, m1 = (p2 - p0) * 0.5f, m2 = (p3 - p1) * 0.5f;
-  return (((dp * 2.0f + m1 + m2) * t - dp * 3.0f - m1 * 2.0f - m2) * t + m1) * t + p1;
+  vec4 dp = gl_in[1].gl_Position - gl_in[2].gl_Position;
+  vec4 m1 = (gl_in[2].gl_Position - gl_in[0].gl_Position) * 0.5;
+  vec4 m2 = (gl_in[3].gl_Position - gl_in[1].gl_Position) * 0.5;
+
+  for (int i = 0; i <= division; ++i)
+  {
+    float s = float(i) / float(division);
+
+    // Catmull-Rom 曲線
+    vec4 position = (((dp * 2.0f + m1 + m2) * s - dp * 3.0f - m1 * 2.0f - m2) * s + m1) * s + gl_in[1].gl_Position;
+
+    // スクリーン座標系の座標値
+    gl_Position = mc * position;
+
+    // 視線ベクトルは頂点位置の逆ベクトル
+    v = -normalize(position.xyz);
+
+    // 光線ベクトルは頂点から光源に向かうベクトル
+    l = normalize((pl - position * pl.w).xyz);
+
+    // 接線ベクトルは Catmull-Rom 曲線 の微分
+    t = normalize(((dp * 6.0f + (m1 + m2) * 3.0f) * s - dp * 6.0f - m1 * 4.0f - m2 * 2.0f) * s + m1).xyz;
+
+    // 頂点の出力
+    EmitVertex();
+  }
+
+  // 図形の終了
+  EndPrimitive();
 }
