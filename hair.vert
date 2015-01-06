@@ -29,6 +29,6 @@ void main()
   l = normalize((pl - position * pl.w).xyz);
 
   // 接線ベクトルは処理対象の節点の前の節点から次の節点に向かうベクトル
-  t = normalize(texelFetch(neighbor, max(gl_VertexID - 1, endpoint.s)) -
-                texelFetch(neighbor, min(gl_VertexID + 1, endpoint.t))).xyz;
+  t = normalize((texelFetch(neighbor, max(gl_VertexID - 1, endpoint.s)) -
+                 texelFetch(neighbor, min(gl_VertexID + 1, endpoint.t))).xyz);
 }
