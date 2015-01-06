@@ -2,7 +2,7 @@
 #extension GL_ARB_explicit_attrib_location : enable
 
 layout (lines_adjacency) in;
-layout (line_strip, max_vertices = 16) out;
+layout (line_strip, max_vertices = 20) out;
 
 // ’è”
 const int division = 4;                             // ‹Èü‚Ì•ªŠ„”
